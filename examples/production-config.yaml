@@ -1,0 +1,63 @@
+# Example Production Configuration for RabbitMQ Web Tool
+# Copy and modify this file for your production deployment
+
+# Configuration values
+namespace: "rabbitmq-webtool-prod"
+hostname: "rmqtool.company.com"
+frontend_image: "rmqk8/rabbitmq-web-ui-frontend:1.63"
+backend_image: "rmqk8/rabbitmq-web-ui-backend:1.0"
+cert_issuer: "letsencrypt-prod"
+rabbitmq_namespace: "rabbitmq-production"
+
+# Resource limits for production
+resources:
+  frontend:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "256Mi"
+      cpu: "200m"
+  backend:
+    requests:
+      memory: "256Mi"
+      cpu: "200m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+
+# High availability configuration
+replicas:
+  frontend: 2
+  backend: 2
+
+# Storage configuration
+storage:
+  size: "10Gi"
+  storageClass: "fast-ssd"
+
+# Security configuration
+security:
+  networkPolicies: true
+  podSecurityPolicy: true
+  serviceAccount: "rabbitmq-webtool-sa"
+
+# Monitoring configuration
+monitoring:
+  enabled: true
+  prometheus: true
+  grafana: true
+
+# Backup configuration
+backup:
+  enabled: true
+  schedule: "0 2 * * *"  # Daily at 2 AM
+  retention: "30d"
+
+---
+# Example deployment command using this config:
+# ./deploy.sh \
+#   --namespace rabbitmq-webtool-prod \
+#   --hostname rmqtool.company.com \
+#   --rabbitmq-namespace rabbitmq-production \
+#   --auto-confirm

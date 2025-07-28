@@ -40,6 +40,34 @@ A modern, feature-rich web interface for managing RabbitMQ clusters with real-ti
 - Seamless vhost switching
 - Complete isolation between virtual hosts
 
+## 🚀 Quick Deployment
+
+### One-Command Deployment
+```bash
+git clone https://github.com/MQGIT/rabbitmq-webtool.git
+cd rabbitmq-webtool
+chmod +x deploy.sh
+./deploy.sh
+```
+
+### Command Line Options
+```bash
+# Deploy with specific settings
+./deploy.sh --namespace my-rmq --hostname rmqtool.mydomain.com --auto-confirm
+
+# Use custom images
+./deploy.sh --frontend-image my-registry/frontend:latest --hostname rmqtool.mydomain.com
+```
+
+### Prerequisites
+- Kubernetes cluster (v1.19+)
+- kubectl configured
+- Ingress controller (nginx recommended)
+- Cert-manager for SSL certificates
+
+📖 **Detailed deployment guide**: [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)
+⚡ **Quick start guide**: [QUICK_START.md](QUICK_START.md)
+
 ## 🏗️ Architecture
 
 - **Frontend**: React.js with modern UI components
