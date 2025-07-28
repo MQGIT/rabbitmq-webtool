@@ -14,30 +14,9 @@ spec:
   - Ingress
   - Egress
   ingress:
-  # Allow ingress from nginx ingress controller
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          name: ingress-nginx
-    ports:
-    - protocol: TCP
-      port: 80
-  # Allow ingress from same namespace (for service mesh, monitoring, etc.)
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          name: apps
-    ports:
-    - protocol: TCP
-      port: 80
-  # Allow ingress from monitoring namespace
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          name: monitoring
-    ports:
-    - protocol: TCP
-      port: 80
+  # Allow all ingress traffic (simplified for testing)
+  # In production, restrict to specific namespaces/pods
+  - {}
   egress:
   # Allow egress to PostgreSQL in same namespace
   - to:
