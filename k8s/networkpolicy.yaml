@@ -1,0 +1,65 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: rabbitmq-web-ui
+  namespace: apps
+  labels:
+    app: rabbitmq-web-ui
+    component: networkpolicy
+spec:
+  podSelector:
+    matchLabels:
+      app: rabbitmq-web-ui
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # Allow ingress from nginx ingress controller
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    ports:
+    - protocol: TCP
+      port: 80
+  # Allow ingress from same namespace (for service mesh, monitoring, etc.)
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: apps
+    ports:
+    - protocol: TCP
+      port: 80
+  # Allow ingress from monitoring namespace
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    ports:
+    - protocol: TCP
+      port: 80
+  egress:
+  # Allow egress to RabbitMQ cluster
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: rmq-kafka
+    ports:
+    - protocol: TCP
+      port: 5672   # AMQP
+    - protocol: TCP
+      port: 15672  # Management API
+  # Allow egress to DNS
+  - to: []
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+  # Allow egress to internet for Docker registry, etc. (if needed)
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 80

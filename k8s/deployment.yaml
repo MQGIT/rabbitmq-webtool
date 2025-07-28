@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq-web-ui
+  namespace: apps
+  labels:
+    app: rabbitmq-web-ui
+    version: "1.51"
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: rabbitmq-web-ui
+  template:
+    metadata:
+      labels:
+        app: rabbitmq-web-ui
+        version: "1.51"
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "80"
+        prometheus.io/path: "/health"
+    spec:
+      containers:
+      - name: rabbitmq-web-ui-backend
+        image: rmqk8/rabbitmq-web-ui:latest
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: 8000
+          protocol: TCP
+        env:
+        - name: ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: rabbitmq-web-ui-config
+              key: ENVIRONMENT
+        - name: ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: rabbitmq-web-ui-secret
+              key: ENCRYPTION_KEY
+        - name: DATABASE_URL
+          value: "postgresql://rabbitmq_user:rabbitmq_password_123@postgres:5432/rabbitmq_ui"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      - name: rabbitmq-web-ui-frontend
+        image: rmqk8/rabbitmq-web-ui-frontend:latest
+        imagePullPolicy: Always
+        ports:
+        - name: http-front
+          containerPort: 3000
+          protocol: TCP
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        # No volume mounts needed for now - using internal storage
+        # Temporarily disabled health checks for debugging
+        # livenessProbe:
+        #   httpGet:
+        #     path: /health
+        #     port: http
+        #   initialDelaySeconds: 30
+        #   periodSeconds: 30
+        #   timeoutSeconds: 10
+        #   failureThreshold: 3
+        # readinessProbe:
+        #   httpGet:
+        #     path: /health
+        #     port: http
+        #   initialDelaySeconds: 5
+        #   periodSeconds: 10
+        #   timeoutSeconds: 5
+        #   failureThreshold: 3
+        # Temporarily removed container security context due to supervisord requirements
+        # securityContext:
+        #   allowPrivilegeEscalation: false
+        #   readOnlyRootFilesystem: false
+        #   capabilities:
+        #     drop:
+        #     - ALL
+      # No volumes needed for now - using internal storage
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30

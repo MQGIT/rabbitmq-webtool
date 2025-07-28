@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  # RabbitMQ Web UI Backend
+  rabbitmq-web-ui-backend:
+    image: rmqk8/rabbitmq-web-ui:latest
+    container_name: rabbitmq-web-ui-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///./data/rabbitmq_web_ui.db
+      - ENCRYPTION_KEY=your-encryption-key-here-change-this
+      - CORS_ORIGINS=["http://localhost:3000", "http://localhost:3001"]
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # RabbitMQ Web UI Frontend
+  rabbitmq-web-ui-frontend:
+    image: rmqk8/rabbitmq-web-ui-frontend:latest
+    container_name: rabbitmq-web-ui-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+    depends_on:
+      - rabbitmq-web-ui-backend
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Optional: RabbitMQ instance for testing
+  # Uncomment the section below if you need a local RabbitMQ instance
+  # rabbitmq:
+  #   image: rabbitmq:3.12-management
+  #   container_name: rabbitmq-test
+  #   ports:
+  #     - "5672:5672"     # AMQP port
+  #     - "15672:15672"   # Management UI port
+  #   environment:
+  #     - RABBITMQ_DEFAULT_USER=admin
+  #     - RABBITMQ_DEFAULT_PASS=admin123
+  #     - RABBITMQ_DEFAULT_VHOST=/
+  #   volumes:
+  #     - rabbitmq_data:/var/lib/rabbitmq
+  #   restart: unless-stopped
+  #   healthcheck:
+  #     test: ["CMD", "rabbitmq-diagnostics", "ping"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
+
+volumes:
+  # Uncomment if using local RabbitMQ
+  # rabbitmq_data:
+
+networks:
+  default:
+    name: rabbitmq-web-ui-network
