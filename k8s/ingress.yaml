@@ -35,7 +35,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: rmqapp-test.marsem.org  # Test domain for deployment testing
+  - host: rmqtool.marsem.org  # Production domain for RabbitMQ Web Tool
     http:
       paths:
       - path: /api
@@ -55,7 +55,7 @@ spec:
   # TLS configuration with cert-manager
   tls:
   - hosts:
-    - rmqapp-test.marsem.org  # Test domain for deployment testing
+    - rmqtool.marsem.org  # Production domain for RabbitMQ Web Tool
     secretName: rabbitmq-web-ui-tls
 
 ---
