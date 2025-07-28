@@ -182,10 +182,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- Built with ❤️ for the RabbitMQ community
+- Built for the RabbitMQ community
 - Inspired by the need for modern RabbitMQ management tools
 - Thanks to all contributors and users
 
 ---
 
-**Made with ❤️ by MarSem.org**
+**Made by MarSem.org**
