@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: rabbitmq-web-ui-data
-  namespace: apps
+  namespace: rabbitmq-webtool-test
   labels:
     app: rabbitmq-web-ui
     component: storage

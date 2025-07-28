@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: rabbitmq-web-ui
-  namespace: apps
+  namespace: rabbitmq-webtool-test
   labels:
     app: rabbitmq-web-ui
     component: ingress
@@ -35,7 +35,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: your-domain.com  # Change this to your domain
+  - host: rmqapp-test.marsem.org  # Test domain for deployment testing
     http:
       paths:
       - path: /api
@@ -55,7 +55,7 @@ spec:
   # TLS configuration with cert-manager
   tls:
   - hosts:
-    - your-domain.com  # Change this to your domain
+    - rmqapp-test.marsem.org  # Test domain for deployment testing
     secretName: rabbitmq-web-ui-tls
 
 ---
@@ -64,7 +64,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: rabbitmq-web-ui-internal
-  namespace: apps
+  namespace: rabbitmq-webtool-test
   labels:
     app: rabbitmq-web-ui
     component: internal-ingress
@@ -76,7 +76,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: rabbitmq-ui-internal.apps.svc.cluster.local
+  - host: rabbitmq-ui-internal-test.rabbitmq-webtool-test.svc.cluster.local
     http:
       paths:
       - path: /

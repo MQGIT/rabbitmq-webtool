@@ -3,7 +3,7 @@ kind: Kustomization
 
 metadata:
   name: rabbitmq-web-ui
-  namespace: apps
+  namespace: rabbitmq-webtool-test
 
 # Common labels applied to all resources
 commonLabels:
@@ -26,9 +26,7 @@ resources:
 # Images to replace
 images:
   - name: rmqk8/rabbitmq-web-ui
-    newTag: "1.51"
-  - name: rmqk8/rabbitmq-web-ui-frontend
-    newTag: "1.51"
+    newTag: "latest"
 
 # ConfigMap generator for additional config
 configMapGenerator:
@@ -39,4 +37,4 @@ configMapGenerator:
       - GIT_COMMIT=main
 
 # Namespace for all resources
-namespace: apps
+namespace: rabbitmq-webtool-test

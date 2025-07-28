@@ -51,7 +51,7 @@ const Connections = () => {
       };
 
       if (editingConnection) {
-        await axios.put(`/api/connections/${editingConnection.id}/`, connectionData);
+        await axios.put(`/api/connections/${editingConnection.id}`, connectionData);
         toast.success('Connection updated successfully');
       } else {
         await axios.post('/api/connections/', connectionData);
@@ -89,7 +89,7 @@ const Connections = () => {
     }
 
     try {
-      await axios.delete(`/api/connections/${id}/`);
+      await axios.delete(`/api/connections/${id}`);
       toast.success('Connection deleted successfully');
       fetchConnections();
     } catch (error) {
@@ -238,21 +238,24 @@ const Connections = () => {
         )}
       </div>
 
-      <div className="grid grid-2">
+      <div className="connections-grid">
         {connections.map(connection => (
-          <div key={connection.id} className="card">
-            <div className="flex justify-between items-start mb-4">
-              <div>
-                <h3 className="font-semibold text-lg">{connection.name}</h3>
-                <p className="text-gray-600">
-                  {connection.host}:{connection.port}{connection.vhost}
+          <div key={connection.id} className="connection-card">
+            <div className="connection-header">
+              <div className="connection-info">
+                <h3 className="connection-name">{connection.name}</h3>
+                <p className="connection-details">
+                  {connection.host}:{connection.port}
+                  {connection.virtual_host && connection.virtual_host !== '/' && ` (${connection.virtual_host})`}
                 </p>
+                <p className="connection-description">{connection.description}</p>
               </div>
-              <div className="flex gap-2">
+              <div className="connection-actions">
                 <button
                   onClick={() => testConnection(connection)}
                   disabled={testingConnection === connection.id}
                   className="btn btn-sm btn-success"
+                  title="Test Connection"
                 >
                   {testingConnection === connection.id ? (
                     <>
@@ -266,26 +269,38 @@ const Connections = () => {
                 <button
                   onClick={() => editConnection(connection)}
                   className="btn btn-sm btn-secondary"
+                  title="Edit Connection"
                 >
                   ✏️ Edit
                 </button>
                 <button
                   onClick={() => deleteConnection(connection.id)}
                   className="btn btn-sm btn-danger"
+                  title="Delete Connection"
                 >
                   🗑️ Delete
                 </button>
               </div>
             </div>
 
-            <div className="grid grid-2 gap-2 text-sm">
-              <div><strong>Username:</strong> {connection.username}</div>
-              <div><strong>SSL:</strong> {connection.ssl ? '✅ Yes' : '❌ No'}</div>
+            <div className="connection-metadata">
+              <div className="metadata-item">
+                <strong>Username:</strong> {connection.username}
+              </div>
+              <div className="metadata-item">
+                <strong>Management Port:</strong> {connection.management_port || 15672}
+              </div>
+              <div className="metadata-item">
+                <strong>SSL:</strong> {connection.use_ssl ? '✅ Yes' : '❌ No'}
+              </div>
+              <div className="metadata-item">
+                <strong>Created:</strong> {new Date(connection.created_at).toLocaleDateString()}
+              </div>
             </div>
 
-            <div className="mt-2">
-              <span className={`status ${connection.status === 'connected' ? 'status-success' : 'status-error'}`}>
-                {connection.status === 'connected' ? '✅ Connected' : '❌ Disconnected'}
+            <div className="connection-status">
+              <span className={`status ${connection.status === 'connected' ? 'status-success' : 'status-info'}`}>
+                {connection.status === 'connected' ? '✅ Connected' : '🔗 Ready to Connect'}
               </span>
             </div>
           </div>

@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: rabbitmq-web-ui
-  namespace: apps
+  namespace: rabbitmq-webtool-test
   labels:
     app: rabbitmq-web-ui
     component: service
@@ -25,7 +25,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: rabbitmq-web-ui-headless
-  namespace: apps
+  namespace: rabbitmq-webtool-test
   labels:
     app: rabbitmq-web-ui
     component: headless-service

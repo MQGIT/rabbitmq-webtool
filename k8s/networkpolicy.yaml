@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: rabbitmq-web-ui
-  namespace: apps
+  namespace: rabbitmq-webtool-test
   labels:
     app: rabbitmq-web-ui
     component: networkpolicy
@@ -14,31 +14,18 @@ spec:
   - Ingress
   - Egress
   ingress:
-  # Allow ingress from nginx ingress controller
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          name: ingress-nginx
-    ports:
-    - protocol: TCP
-      port: 80
-  # Allow ingress from same namespace (for service mesh, monitoring, etc.)
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          name: apps
-    ports:
-    - protocol: TCP
-      port: 80
-  # Allow ingress from monitoring namespace
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          name: monitoring
-    ports:
-    - protocol: TCP
-      port: 80
+  # Allow all ingress traffic (simplified for testing)
+  # In production, restrict to specific namespaces/pods
+  - {}
   egress:
+  # Allow egress to PostgreSQL in same namespace
+  - to:
+    - podSelector:
+        matchLabels:
+          app: postgres
+    ports:
+    - protocol: TCP
+      port: 5432   # PostgreSQL
   # Allow egress to RabbitMQ cluster
   - to:
     - namespaceSelector:
