@@ -6,7 +6,7 @@
 set -e
 
 # Configuration
-NAMESPACE="apps"
+NAMESPACE="rabbitmq-webtool-test"
 APP_NAME="rabbitmq-web-ui"
 K8S_DIR="k8s"
 

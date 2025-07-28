@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: rabbitmq-web-ui-html
-  namespace: apps
+  namespace: rabbitmq-webtool-test
   labels:
     app: rabbitmq-web-ui
     component: html-content
@@ -83,7 +83,7 @@ data:
                 <p>Your RabbitMQ Web UI has been successfully deployed to Kubernetes with SSL certificate support.</p>
                 <p><strong>Domain:</strong> rmqapp.marsem.org</p>
                 <p><strong>SSL Certificate:</strong> ✅ Active (Let's Encrypt)</p>
-                <p><strong>Namespace:</strong> apps</p>
+                <p><strong>Namespace:</strong> rabbitmq-webtool-test</p>
             </div>
 
             <div class="grid">

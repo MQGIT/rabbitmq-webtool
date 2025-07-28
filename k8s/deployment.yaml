@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: rabbitmq-web-ui
-  namespace: apps
+  namespace: rabbitmq-webtool-test
   labels:
     app: rabbitmq-web-ui
     version: "1.51"
@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: rabbitmq-web-ui-backend
-        image: rmqk8/rabbitmq-web-ui:latest
+        image: rmqk8/rabbitmq-web-ui:1.55
         imagePullPolicy: Always
         ports:
         - name: http
@@ -55,7 +55,7 @@ spec:
             memory: "512Mi"
             cpu: "500m"
       - name: rabbitmq-web-ui-frontend
-        image: rmqk8/rabbitmq-web-ui-frontend:latest
+        image: rmqk8/rabbitmq-web-ui-frontend:1.57
         imagePullPolicy: Always
         ports:
         - name: http-front
