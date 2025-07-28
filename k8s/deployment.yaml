@@ -55,7 +55,7 @@ spec:
             memory: "512Mi"
             cpu: "500m"
       - name: rabbitmq-web-ui-frontend
-        image: rmqk8/rabbitmq-web-ui-frontend:1.62
+        image: rmqk8/rabbitmq-web-ui-frontend:1.63
         imagePullPolicy: Always
         ports:
         - name: http-front

@@ -54,7 +54,7 @@ const Connections = () => {
         await axios.put(`/api/connections/${editingConnection.id}`, connectionData);
         toast.success('Connection updated successfully');
       } else {
-        await axios.post('/api/connections', connectionData);
+        await axios.post('/api/connections/', connectionData);
         toast.success('Connection added successfully');
       }
 
