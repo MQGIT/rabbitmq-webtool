@@ -186,5 +186,18 @@ All core functionality verified:
 - ✅ Multi-container pod architecture working
 - ✅ Kubernetes services and networking configured
 - ✅ Security policies properly implemented
+- ✅ **INGRESS ACCESS WORKING**: https://rmqapp-test.marsem.org/
+- ✅ **API ENDPOINTS ACCESSIBLE**: https://rmqapp-test.marsem.org/api/connections/
+
+## 🎉 INGRESS ISSUE RESOLVED
+
+**Issue:** 504 Gateway Timeout when accessing via ingress
+**Root Cause:** nginx frontend container configured with `server_name localhost;` but ingress sends actual domain name
+**Solution:**
+- Updated nginx configuration to use `server_name _;` (wildcard)
+- Created nginx-configmap.yaml to mount corrected configuration
+- Simplified network policy to allow ingress traffic
+
+**Result:** Application now fully accessible via ingress with SSL certificate working properly.
 
 The application is ready for production use with appropriate scaling and monitoring configurations.
