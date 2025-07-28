@@ -1,0 +1,155 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-fixes
+  namespace: rabbitmq-webtool-test
+  labels:
+    app: rabbitmq-web-ui
+    component: frontend-fixes
+data:
+  # Updated CSS with improved connection layout
+  connections-styles.css: |
+    /* Connections Grid Layout */
+    .connections-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .connections-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+
+    /* Connection Card Styles */
+    .connection-card {
+      background: white;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e2e8f0;
+      transition: all 0.2s ease;
+    }
+
+    .connection-card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .connection-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      gap: 1rem;
+    }
+
+    .connection-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .connection-name {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin: 0 0 0.5rem 0;
+      word-break: break-word;
+    }
+
+    .connection-details {
+      color: #64748b;
+      font-size: 0.875rem;
+      margin: 0 0 0.25rem 0;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    }
+
+    .connection-description {
+      color: #64748b;
+      font-size: 0.875rem;
+      margin: 0;
+      font-style: italic;
+    }
+
+    .connection-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 640px) {
+      .connection-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .connection-actions {
+        justify-content: flex-end;
+        margin-top: 0.75rem;
+      }
+    }
+
+    .connection-metadata {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      background-color: #f8fafc;
+      border-radius: 0.5rem;
+    }
+
+    .metadata-item {
+      font-size: 0.875rem;
+      color: #374151;
+    }
+
+    .metadata-item strong {
+      color: #1f2937;
+      font-weight: 500;
+    }
+
+    .connection-status {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    /* Override the old grid-2 layout for connections */
+    .connections-page .grid.grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 1.5rem;
+    }
+
+  # JavaScript patch to fix API endpoints
+  api-fix.js: |
+    // Fix API endpoints by removing trailing slashes
+    (function() {
+      console.log('Applying API endpoint fixes...');
+      
+      // Override axios defaults to remove trailing slashes
+      if (window.axios) {
+        const originalPost = window.axios.post;
+        const originalPut = window.axios.put;
+        const originalDelete = window.axios.delete;
+        
+        window.axios.post = function(url, ...args) {
+          return originalPost.call(this, url.replace(/\/$/, ''), ...args);
+        };
+        
+        window.axios.put = function(url, ...args) {
+          return originalPut.call(this, url.replace(/\/$/, ''), ...args);
+        };
+        
+        window.axios.delete = function(url, ...args) {
+          return originalDelete.call(this, url.replace(/\/$/, ''), ...args);
+        };
+        
+        console.log('API endpoint fixes applied successfully');
+      }
+    })();
